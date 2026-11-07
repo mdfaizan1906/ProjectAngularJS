@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html>
+     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+
+<head> 
+    <title>Restaurant Management System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #333;
+            color: white;
+        }
+        input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+        .total {
+            text-align: right;
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        @media print {
+            button { display: none; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Restaurant Management System</h2>
+    <h3>Food Menu</h3>
+
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Price (₹)</th>
+            <th>Quantity</th>
+            <th>Total (₹)</th>
+        </tr>
+
+        <tbody id="menu"></tbody>
+    </table>
+
+    <div class="total">
+        Grand Total: ₹<span id="grandTotal">0</span>
+    </div>
+
+    <button onclick="calculateTotal()">Calculate Bill</button>
+    <button onclick="window.print()">Print Bill</button>
+
+</div>
+
+<script>
+    const items = [
+        { name: "Idli", price: 30 },
+        { name: "Dosa", price: 50 },
+        { name: "Poori", price: 40 },
+        { name: "Chapati", price: 35 },
+        { name: "Meals", price: 100 },
+        { name: "Coffee", price: 20 },
+        { name: "Tea", price: 15 },
+        { name: "Fried Rice", price: 90 }
+    ];
+
+    const menu = document.getElementById("menu");
+
+    items.forEach((item, index) => {
+        menu.innerHTML += `
+            <tr>
+                <td>${item.name}</td>
+                <td>${item.price}</td>
+                <td>
+                    <input type="number" min="0" value="0"
+                    id="qty${index}"
+                    oninput="calculateTotal()">
+                </td>
+                <td id="total${index}">0</td>
+            </tr>
+        `;
+    });
+
+    function calculateTotal() {
+        let grandTotal = 0;
+
+        items.forEach((item, index) => {
+            let qty = Number(document.getElementById("qty" + index).value);
+
+            if (!Number.isFinite(qty) || qty < 0) qty = 0;
+
+            let total = item.price * qty;
+
+            document.getElementById("total" + index).innerText = total;
+
+            grandTotal += total;
+        });
+
+        document.getElementById("grandTotal").innerText = grandTotal;
+    }
+</script>
+
+</body>
+</html>
